@@ -99,8 +99,9 @@ def move():
         turtle.goto(arrow.xcor() + 15, SCREEN_HEIGHT)
         turtle.goto(arrow.xcor() - 10, SCREEN_HEIGHT)
         turtle.end_fill()
-        turtle.forward(10000)
+        turtle.forward(20000)
         turtle.reset()
+
         turtle.hideturtle()
         
 
