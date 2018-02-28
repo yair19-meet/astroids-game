@@ -2,8 +2,70 @@ from turtle import *
 import turtle
 import random
 import time
+import math
+
 
 turtle.tracer(1, 0)
+
+
+class Asteroids(Turtle):
+    def __init__(self,x,y,dy,r,color):
+        Turtle.__init__(self)
+        self.penup()
+        self.goto(x, y)
+        self.dy = dy
+        self.x = x
+        self.r = r
+        self.left(90)
+        self.color(color)
+        self.shape("circle")
+
+    def moveball(self):
+        current_y = self.ycor()
+        new_y = current_y + self.dy
+        down_side_asteroids = new_y - self.r            
+        if(down_side_asteroids == -SCREEN_HEIGHT):
+          self.goto(self.x,SCREEN_HEIGHT)
+
+        self.goto(new_x,new_y)
+
+          
+    def MoveDown(self):
+        # it moves the balls down while there is no collision between the balls and the arrow and the ground
+       # a = self.y-1
+       # self.y = a
+       # self.goto(self.x,a)
+       self.forward(-1)
+       turtle.update()
+
+def collide(arrow_circle, astroid):
+    D = math.sqrt(math.pow(arrow_circle.xcor()-astroid.xcor(), 2) + math.pow(arrow_circle.ycor()-astroid.ycor(),2))
+    sum_r= int((arrow_circle.shapesize()[0])/10)+astroid.r
+    if(D+10<=sum_r):
+       return True
+    return False
+    #if D < astroid.r:
+        #return True
+        #print("TRUETRUE")
+    #return False
+
+
+MAXIMUM_BALL_RADIUS = 20
+MINIMUM_BALL_RADIUS = 10
+MAXIMUM_BALL_Dy = 5
+MINIMUM_BALL_Dy = 3
+SCREEN_WIDTH = turtle.getcanvas().winfo_width()/2
+SCREEN_HEIGHT = turtle.getcanvas().winfo_height()/2
+ASTEROIDS=[]
+
+def check_astroid_collision(self):
+    for astroid in ASTEROIDS:
+        if collide(arrow_circle,astroid):
+            print("collide")
+            X=random.randint(round(-SCREEN_WIDTH)+MAXIMUM_BALL_RADIUS, round(SCREEN_WIDTH) - MAXIMUM_BALL_RADIUS)
+            Y= random.randint(SCREEN_HEIGHT,SCREEN_HEIGHT+80)
+            astroid.goto(X,Y)
+
 
 class Rectangle(Turtle):
     def __init__(self, width, hieght):
@@ -14,6 +76,23 @@ class Rectangle(Turtle):
         self.setheading(90)
         turtle.register_shape("rec", ((0, 0), (width, 0), (width, hieght), (0, hieght), (0, 0)))
         self.shape("rec")
+
+
+
+
+def CREATEBALLS():
+    NUMBER_OF_BALLS= 10
+    for i in range(NUMBER_OF_BALLS):
+         x = random.randint(int(-SCREEN_WIDTH) + MAXIMUM_BALL_RADIUS ,int(SCREEN_WIDTH)- MAXIMUM_BALL_RADIUS)
+         y = SCREEN_HEIGHT
+         dy =random.randint(MINIMUM_BALL_Dy, MAXIMUM_BALL_Dy)
+         radius =random.randint(MINIMUM_BALL_RADIUS, MAXIMUM_BALL_RADIUS)
+         color =(random.random(),random.random(),random.random())
+         New_Asteroids = Asteroids(x,y,dy,radius, color)
+         ASTEROIDS.append(New_Asteroids)
+         turtle.update()
+         
+CREATEBALLS()
 
 
 arrow = Rectangle(10, 10)
@@ -66,7 +145,9 @@ space.shape("Space_Shipp.gif")
 
 arrow_circle = turtle.clone()
 arrow_circle.shape('circle')
-arrow_circle.hideturtle()
+arrow_circle.showturtle()
+
+print(arrow_circle.shapesize())
 
 LEFT_ARROW = "Left"
 RIGHT_ARROW = "Right"
@@ -142,6 +223,17 @@ def click(x, y):
             time.sleep(0.2)
 
         space.showturtle()
+
+        while True:
+            for i in ASTEROIDS:
+                i.MoveDown()
+                 
+                if(i.ycor() == -SCREEN_HEIGHT):
+                    i.goto(i.x,SCREEN_HEIGHT)
+
+        
+                
+        
         # size_of_pen = 50
         # for i in range(2):
         #     for i in range(30):
@@ -171,10 +263,12 @@ def click(x, y):
 
 def move():
     bool = False
-    red_laser.hideturtle()
+    #red_laser.hideturtle()
     arrow.goto(space.xcor() - 5, space.ycor() + 15)
     arrow_circle.goto(arrow.xcor(), arrow.ycor())
     arrow.showturtle()
+    arrow.penup()
+    arrow.color("lightblue")
     turtle.penup()
     size = 10
     # print("size: " + str(size))
@@ -182,14 +276,19 @@ def move():
         current_y = arrow.ycor()
         new_y = arrow.ycor() + 0.25
         # arrow.goto(arrow.xcor(), new_y)
-        arrow_circle.goto(arrow.xcor(), arrow.ycor() + size)
+        arrow_circle.goto(arrow.xcor() + 5, arrow.ycor() + size)
         moving_t.forward(15)
         arrow.hieght = size
         # print(arrow.hieght)
         # print("size: " + str(size))
         turtle.register_shape("rec", ((0, 0), (arrow.width, 0), (arrow.width, arrow.hieght), (0, arrow.hieght), (0, 0)))
         arrow.shape("rec")
-        size += 1
+        size += 5
+        for astroid in ASTEROIDS:
+            check_astroid_collision(astroid)
+            astroid.MoveDown()
+            
+            
         # if arrow.ycor() + size == SCREEN_HEIGHT:
         #     moving_t.forward(100000)
         #     arrow.hideturtle()
@@ -213,39 +312,6 @@ def move():
         moving_t.forward(10000)
         arrow.hideturtle()
 
-    # turtle.hideturtle()
-    # moving_t.forward(10000)
-    # turtle.showturtle()
-
-    #    Color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-
-    #   r = random.randrange(0, 257, 10)
-    #   g = random.randrange(0, 257, 10)
-    #   b = random.randrange(0, 257, 10)
-
-    # arrow.color("black")
-    # if bool:
-    #     #   arrow.hideturtle()
-    #     #   turtle.bgcolor("orange")
-    #     #   turtle.forward(10000)
-    #     #    turtle.bgcolor("white")
-    #
-    #     arrow.hideturtle()
-    #
-    #     turtle.color("black", "orange")
-    #     arrow.penup()
-    #     turtle.penup()
-    #     turtle.begin_fill()
-    #     turtle.goto(arrow.xcor() - 10, SCREEN_HEIGHT)
-    #     turtle.goto(arrow.xcor() - 10, -700)
-    #     turtle.goto(arrow.xcor() + 15, -700)
-    #     turtle.goto(arrow.xcor() + 15, SCREEN_HEIGHT)
-    #     turtle.goto(arrow.xcor() - 10, SCREEN_HEIGHT)
-    #     turtle.end_fill()
-    #     turtle.forward(20000)
-    #     turtle.reset()
-    #
-    #     turtle.hideturtle()
 
 def shoot_red_laser():
     arrow.hideturtle()
@@ -303,6 +369,7 @@ turtle.onkey(shoot_red_laser, 's')
 turtle.listen()
 
 turtle.onclick(click)
+
 
 turtle.mainloop()
 
