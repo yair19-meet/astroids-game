@@ -7,6 +7,7 @@ import math
 
 turtle.tracer(1, 0)
 
+SHAPE_SIZE=20
 
 class Asteroids(Turtle):
     def __init__(self,x,y,dy,r,color):
@@ -15,7 +16,8 @@ class Asteroids(Turtle):
         self.goto(x, y)
         self.dy = dy
         self.x = x
-        self.r = r
+        self.shapesize(SHAPE_SIZE/10)
+        self.r = SHAPE_SIZE
         self.left(90)
         self.color(color)
         self.shape("circle")
@@ -57,13 +59,23 @@ MINIMUM_BALL_Dy = 3
 SCREEN_WIDTH = turtle.getcanvas().winfo_width()/2
 SCREEN_HEIGHT = turtle.getcanvas().winfo_height()/2
 ASTEROIDS=[]
-
+counter= 0
+counter_1= turtle.clone()
+counter_1.color("yellow")
+counter_1.goto(0,0)
+counter_1.hideturtle()
 def check_astroid_collision(self):
+    global counter
     for astroid in ASTEROIDS:
         if collide(arrow_circle,astroid):
             print("collide")
+            counter+=1
+            counter_1.goto(200,250)
+            counter_1.clear()            
+            counter_1.write("Your score: "+str(counter) , font= ("Arial", 20, "bold"))
             X=random.randint(round(-SCREEN_WIDTH)+MAXIMUM_BALL_RADIUS, round(SCREEN_WIDTH) - MAXIMUM_BALL_RADIUS)
             Y= random.randint(SCREEN_HEIGHT,SCREEN_HEIGHT+80)
+            
             astroid.goto(X,Y)
 
 
