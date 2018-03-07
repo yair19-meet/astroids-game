@@ -10,10 +10,11 @@ class Asteroids(Turtle):
         self.dy = dy
         self.x = x
         self.r = r
+        self.left(90)
         self.color(color)
         self.shape("circle")
 
-    def move():
+    def move(self):
         current_y = self.ycor()
         new_y = current_y + self.dy
         down_side_asteroids = new_y - self.r            
@@ -21,12 +22,14 @@ class Asteroids(Turtle):
           self.goto(self.x,SCREEN_HEIGHT)
 
         self.goto(new_x,new_y)
-    def MoveDown():
+
+    def MoveDown(self):
         # it moves the balls down while there is no collision between the balls and the arrow and the ground
        # a = self.y-1
        # self.y = a
        # self.goto(self.x,a)
        self.forward(-2)
+       turtle.update()
 
 RUNNING = True
       
